@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Text = ({ color, fontSize, fontWeight, style, ...props }) => {
+const Text = ({ color, fontSize, fontWeight, textWrap, style, ...props }) => {
   const textStyle = [
     styles.text,
     color === "textSecondary" && styles.colorTextSecondary,
@@ -38,6 +38,7 @@ const Text = ({ color, fontSize, fontWeight, style, ...props }) => {
     fontSize === "navheading" && styles.fontSizeNavheading,
     fontSize === "subheading" && styles.fontSizeSubheading,
     fontWeight === "bold" && styles.fontWeightBold,
+    textWrap === "true" && styles.textWrap,
     style,
   ];
 
