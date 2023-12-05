@@ -2,11 +2,23 @@ import Text from "./Text";
 import { Pressable, View } from "react-native";
 import { Formik, useField } from "formik";
 import FormikTextInput from "./FormikTextInput";
+import * as yup from "yup";
 
 const initialValues = {
   username: "",
   password: "",
 };
+
+const validationSchema = yup.object().shape({
+  username: yup
+    .string()
+    .min(5, "Username must be at least 5 characters")
+    .required("Username is required"),
+  password: yup
+    .string()
+    .min(5, "Password must be at least 5 characters")
+    .required("Password is required"),
+});
 
 const SignInForm = ({ onSubmit }) => {
   const [usernameField, usernameMeta, usernameHelpers] = useField("username");
@@ -17,14 +29,6 @@ const SignInForm = ({ onSubmit }) => {
       display: "flex",
       padding: 20,
       backgroundColor: "white",
-    },
-    formField: {
-      padding: 15,
-      borderStyle: "solid",
-      borderColor: "darkgrey",
-      borderWidth: 1,
-      borderRadius: 5,
-      marginBottom: 20,
     },
     formButton: {
       padding: 15,
@@ -48,6 +52,7 @@ const SignInForm = ({ onSubmit }) => {
       <FormikTextInput
         name="password"
         placeholder="Password"
+        secureTextEntry={true}
         value={passowordField.value}
         onChangeText={(text) => passwordHelpers.setValue(text)}
         style={styles.formField}
@@ -68,7 +73,11 @@ const SignIn = () => {
   };
 
   return (
-    <Formik initialValues={initialValues} onSubmit={onSubmit}>
+    <Formik
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+      validationSchema={validationSchema}
+    >
       {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} />}
     </Formik>
   );
