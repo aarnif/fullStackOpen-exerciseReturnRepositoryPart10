@@ -1,4 +1,4 @@
-import { View, StyleSheet, Pressable } from "react-native";
+import { View, StyleSheet, Pressable, ScrollView } from "react-native";
 import { Link } from "react-router-native";
 import Text from "./Text";
 
@@ -16,35 +16,25 @@ const styles = StyleSheet.create({
   },
 });
 
-const onPressRepos = () => {
-  console.log("Repositories pressed!");
-};
-
-const onPressSignIn = () => {
-  console.log("Sign in pressed!");
-};
-
 const AppBar = () => {
   return (
     <View style={styles.navContainer}>
-      <View style={styles.navItem}>
-        <Link to="/">
-          <Pressable onPress={onPressRepos}>
+      <ScrollView horizontal>
+        <View style={styles.navItem}>
+          <Link to="/">
             <Text color={"header"} fontWeight={"bold"} fontSize={"navheading"}>
               Repositories
             </Text>
-          </Pressable>
-        </Link>
-      </View>
-      <View style={styles.navItem}>
-        <Link to="/signin">
-          <Pressable onPress={onPressSignIn}>
+          </Link>
+        </View>
+        <View style={styles.navItem}>
+          <Link to="/signin">
             <Text color={"header"} fontWeight={"bold"} fontSize={"navheading"}>
               Sign in
             </Text>
-          </Pressable>
-        </Link>
-      </View>
+          </Link>
+        </View>
+      </ScrollView>
     </View>
   );
 };
