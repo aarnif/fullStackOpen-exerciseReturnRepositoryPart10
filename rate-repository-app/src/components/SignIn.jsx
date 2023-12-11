@@ -1,3 +1,4 @@
+import useSignIn from "../hooks/useSignIn";
 import Text from "./Text";
 import { Pressable, View } from "react-native";
 import { Formik, useField } from "formik";
@@ -68,8 +69,17 @@ const SignInForm = ({ onSubmit }) => {
 };
 
 const SignIn = () => {
-  const onSubmit = () => {
-    console.log("Clicked Sign in!");
+  const [signIn] = useSignIn();
+
+  const onSubmit = async (values) => {
+    const { username, password } = values;
+
+    try {
+      const { data } = await signIn({ username, password });
+      console.log(data);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
