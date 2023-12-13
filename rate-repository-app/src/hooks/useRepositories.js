@@ -20,7 +20,7 @@ const useRepositories = () => {
 
   useEffect(() => {
     fetchRepositories();
-  }, []);
+  }, [loading]);
 
   return { repositories, loading, refetch: fetchRepositories };
 };
