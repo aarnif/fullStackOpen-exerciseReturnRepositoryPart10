@@ -4,6 +4,7 @@ import Text from "./Text";
 import { Pressable, View } from "react-native";
 import { Formik, useField } from "formik";
 import FormikTextInput from "./FormikTextInput";
+import { useQuery, useApolloClient } from "@apollo/client";
 import * as yup from "yup";
 
 const initialValues = {
