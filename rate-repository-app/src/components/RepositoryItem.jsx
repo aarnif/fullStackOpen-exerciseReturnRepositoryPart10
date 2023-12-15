@@ -53,7 +53,7 @@ const RepositoryItem = ({ item }) => {
   };
 
   return (
-    <View style={styles.profileContainer}>
+    <View testID="repositoryItem" style={styles.profileContainer}>
       <View style={styles.detailsAndImageContainer}>
         <Image
           style={styles.image}
@@ -81,7 +81,9 @@ const RepositoryItem = ({ item }) => {
       </View>
       <View style={styles.statsContainer}>
         <View style={styles.statsItem}>
-          <Text fontWeight={"bold"}>{displayNumber(item.stargazersCount)}</Text>
+          <Text testID="stargazersCount" fontWeight={"bold"}>
+            {displayNumber(item.stargazersCount)}
+          </Text>
           <Text color={"textSecondary"}>Stars</Text>
         </View>
         <View style={styles.statsItem}>
