@@ -1,8 +1,10 @@
 import { StyleSheet, View } from "react-native";
-import { Route, Routes, Navigate } from "react-router-native";
+import { Route, Routes, useMatch, Navigate } from "react-router-native";
 import AppBar from "./AppBar";
 import RepositoryList from "./RepositoryList";
+import RepositoryItem from "./RepositoryItem";
 import SignIn from "./SignIn";
+import useRepositories from "../hooks/useRepositories";
 
 const styles = StyleSheet.create({
   container: {
@@ -13,12 +15,31 @@ const styles = StyleSheet.create({
 });
 
 const Main = () => {
+  const { repositories } = useRepositories();
+
+  const repositoryNodes = repositories
+    ? repositories.edges.map((edge) => edge.node)
+    : [];
+
+  const matchRepo = useMatch("/repositories/:id");
+  const findRepo = matchRepo
+    ? repositoryNodes.find(
+        (repository) => repository.id === matchRepo.params.id
+      )
+    : null;
+
   return (
     <View style={styles.container}>
       <AppBar />
       <Routes>
         <Route path="/" element={<RepositoryList />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route
+          path="/repositories/:id"
+          element={
+            <RepositoryItem item={findRepo} showLinkToGitHubPage={true} />
+          }
+        />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </View>

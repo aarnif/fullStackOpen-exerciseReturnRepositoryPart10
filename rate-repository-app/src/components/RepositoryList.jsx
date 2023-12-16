@@ -16,7 +16,7 @@ export const RepositoryListContainer = ({ repositories }) => {
     ? repositories.edges.map((edge) => edge.node)
     : [];
 
-  // console.log(repositoryNodes);
+  console.log(repositoryNodes);
 
   return (
     <FlatList
@@ -24,7 +24,7 @@ export const RepositoryListContainer = ({ repositories }) => {
       ItemSeparatorComponent={ItemSeparator}
       // other props
       renderItem={({ item }) => {
-        return <RepositoryItem item={item} />;
+        return <RepositoryItem item={item} showLinkToGitHubPage={false} />;
       }}
     />
   );

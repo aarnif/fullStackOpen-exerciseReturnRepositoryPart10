@@ -1,7 +1,17 @@
-import { View, Image, StyleSheet } from "react-native";
+import { View, Image, StyleSheet, Pressable } from "react-native";
+import { useNavigate } from "react-router-native";
 import Text from "./Text";
+import { GET_REPO } from "../graphql/queries";
+import { useQuery } from "@apollo/client";
+import * as Linking from "expo-linking";
 
-const RepositoryItem = ({ item }) => {
+const RepositoryItem = ({ item, showLinkToGitHubPage }) => {
+  const { data, error, loading } = useQuery(GET_REPO, {
+    fetchPolicy: "cache-and-network",
+    variables: { repositoryId: item.id },
+  });
+  const navigate = useNavigate();
+
   const styles = StyleSheet.create({
     profileContainer: {
       paddingTop: 15,
@@ -16,7 +26,7 @@ const RepositoryItem = ({ item }) => {
     image: {
       width: 50,
       height: 50,
-      borderRadius: 5,
+      borderRadius: 2,
       marginRight: 20,
     },
     detailsContainer: {
@@ -44,6 +54,14 @@ const RepositoryItem = ({ item }) => {
       alignItems: "center",
       padding: 20,
     },
+    buttonContainer: {
+      marginBottom: 10,
+      padding: 10,
+      backgroundColor: "#0366d6",
+      borderRadius: 2,
+      display: "flex",
+      alignItems: "center",
+    },
   });
 
   const displayNumber = (number) => {
@@ -52,54 +70,83 @@ const RepositoryItem = ({ item }) => {
       : number;
   };
 
+  const handlePress = () => {
+    navigate(`/repositories/${item.id}`);
+  };
+
+  const handleLinkToGithub = () => {
+    console.log("Open github link:", data.repository.url);
+    Linking.openURL(data.repository.url);
+  };
+
+  if (loading) {
+    return null;
+  }
+
   return (
-    <View testID="repositoryItem" style={styles.profileContainer}>
-      <View style={styles.detailsAndImageContainer}>
-        <Image
-          style={styles.image}
-          source={{
-            uri: item.ownerAvatarUrl,
-          }}
-        />
-        <View style={styles.detailsContainer}>
-          <View style={styles.detailsItem}>
-            <Text fontSize={"subheading"} fontWeight={"bold"}>
-              {item.fullName}
-            </Text>
-          </View>
-          <View style={styles.detailsItem}>
-            <Text fontSize={"textSecondary"} color={"textSecondary"}>
-              {item.description}
-            </Text>
-          </View>
-          <View style={styles.detailsItem}>
-            <View style={styles.languageContainer}>
-              <Text color={"header"}>{item.language}</Text>
+    <Pressable onPress={handlePress}>
+      <View testID="repositoryItem" style={styles.profileContainer}>
+        <View style={styles.detailsAndImageContainer}>
+          <Image
+            style={styles.image}
+            source={{
+              uri: item.ownerAvatarUrl,
+            }}
+          />
+          <View style={styles.detailsContainer}>
+            <View style={styles.detailsItem}>
+              <Text fontSize={"subheading"} fontWeight={"bold"}>
+                {item.fullName}
+              </Text>
+            </View>
+            <View style={styles.detailsItem}>
+              <Text fontSize={"textSecondary"} color={"textSecondary"}>
+                {item.description}
+              </Text>
+            </View>
+            <View style={styles.detailsItem}>
+              <View style={styles.languageContainer}>
+                <Text color={"header"}>{item.language}</Text>
+              </View>
             </View>
           </View>
         </View>
+        <View style={styles.statsContainer}>
+          <View style={styles.statsItem}>
+            <Text testID="stargazersCount" fontWeight={"bold"}>
+              {displayNumber(item.stargazersCount)}
+            </Text>
+            <Text color={"textSecondary"}>Stars</Text>
+          </View>
+          <View style={styles.statsItem}>
+            <Text fontWeight={"bold"}>{displayNumber(item.forksCount)}</Text>
+            <Text color={"textSecondary"}>Forks</Text>
+          </View>
+          <View style={styles.statsItem}>
+            <Text fontWeight={"bold"}>{displayNumber(item.reviewCount)}</Text>
+            <Text color={"textSecondary"}>Reviews</Text>
+          </View>
+          <View style={styles.statsItem}>
+            <Text fontWeight={"bold"}>{displayNumber(item.ratingAverage)}</Text>
+            <Text color={"textSecondary"}>Rating</Text>
+          </View>
+        </View>
+
+        {showLinkToGitHubPage && (
+          <View style={styles.buttonContainer}>
+            <Pressable onPress={handleLinkToGithub}>
+              <Text
+                color={"header"}
+                fontWeight={"bold"}
+                fontSize={"navheading"}
+              >
+                Open in GitHub
+              </Text>
+            </Pressable>
+          </View>
+        )}
       </View>
-      <View style={styles.statsContainer}>
-        <View style={styles.statsItem}>
-          <Text testID="stargazersCount" fontWeight={"bold"}>
-            {displayNumber(item.stargazersCount)}
-          </Text>
-          <Text color={"textSecondary"}>Stars</Text>
-        </View>
-        <View style={styles.statsItem}>
-          <Text fontWeight={"bold"}>{displayNumber(item.forksCount)}</Text>
-          <Text color={"textSecondary"}>Forks</Text>
-        </View>
-        <View style={styles.statsItem}>
-          <Text fontWeight={"bold"}>{displayNumber(item.reviewCount)}</Text>
-          <Text color={"textSecondary"}>Reviews</Text>
-        </View>
-        <View style={styles.statsItem}>
-          <Text fontWeight={"bold"}>{displayNumber(item.ratingAverage)}</Text>
-          <Text color={"textSecondary"}>Rating</Text>
-        </View>
-      </View>
-    </View>
+    </Pressable>
   );
 };
 
