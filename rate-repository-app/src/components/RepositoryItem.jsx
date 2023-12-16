@@ -1,12 +1,12 @@
 import { View, Image, StyleSheet, Pressable } from "react-native";
 import { useNavigate } from "react-router-native";
 import Text from "./Text";
-import { GET_REPO } from "../graphql/queries";
+import { GET_SINGLE_REPO } from "../graphql/queries";
 import { useQuery } from "@apollo/client";
 import * as Linking from "expo-linking";
 
 const RepositoryItem = ({ item, showLinkToGitHubPage }) => {
-  const { data, error, loading } = useQuery(GET_REPO, {
+  const { data, error, loading } = useQuery(GET_SINGLE_REPO, {
     fetchPolicy: "cache-and-network",
     variables: { repositoryId: item.id },
   });
@@ -17,6 +17,7 @@ const RepositoryItem = ({ item, showLinkToGitHubPage }) => {
       paddingTop: 15,
       paddingLeft: 15,
       paddingRight: 15,
+      marginBottom: 10,
       backgroundColor: "white",
     },
     detailsAndImageContainer: {

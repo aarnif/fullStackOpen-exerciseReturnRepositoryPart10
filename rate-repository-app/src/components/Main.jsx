@@ -2,7 +2,7 @@ import { StyleSheet, View } from "react-native";
 import { Route, Routes, useMatch, Navigate } from "react-router-native";
 import AppBar from "./AppBar";
 import RepositoryList from "./RepositoryList";
-import RepositoryItem from "./RepositoryItem";
+import SingleRepository from "./SingleRepository";
 import SignIn from "./SignIn";
 import useRepositories from "../hooks/useRepositories";
 
@@ -36,9 +36,7 @@ const Main = () => {
         <Route path="/signin" element={<SignIn />} />
         <Route
           path="/repositories/:id"
-          element={
-            <RepositoryItem item={findRepo} showLinkToGitHubPage={true} />
-          }
+          element={<SingleRepository repositoryId={findRepo?.id} />}
         />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
