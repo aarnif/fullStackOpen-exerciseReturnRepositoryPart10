@@ -48,7 +48,7 @@ const AppBar = () => {
           </Link>
         </View>
         <View style={styles.navItem}>
-          {data?.me ? (
+          {data?.me !== null ? (
             <Pressable onPress={signOut}>
               <Text
                 color={"header"}
