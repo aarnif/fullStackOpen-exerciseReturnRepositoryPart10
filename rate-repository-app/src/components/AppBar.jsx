@@ -5,7 +5,6 @@ import { useQuery, useApolloClient } from "@apollo/client";
 
 import { GET_USER } from "../graphql/queries";
 import { useContext } from "react";
-import { useState, useEffect } from "react";
 
 import AuthStorageContext from "../contexts/AuthStorageContext";
 
@@ -47,29 +46,38 @@ const AppBar = () => {
             </Text>
           </Link>
         </View>
-        <View style={styles.navItem}>
-          {data?.me !== null ? (
-            <Pressable onPress={signOut}>
-              <Text
-                color={"header"}
-                fontWeight={"bold"}
-                fontSize={"navheading"}
-              >
-                Sign out
-              </Text>
-            </Pressable>
-          ) : (
-            <Link to="/signin">
-              <Text
-                color={"header"}
-                fontWeight={"bold"}
-                fontSize={"navheading"}
-              >
-                Sign in
-              </Text>
-            </Link>
-          )}
-        </View>
+        {data?.me !== null ? (
+          <>
+            <View style={styles.navItem}>
+              <Link to="/create-review">
+                <Text
+                  color={"header"}
+                  fontWeight={"bold"}
+                  fontSize={"navheading"}
+                >
+                  Create Review
+                </Text>
+              </Link>
+            </View>
+            <View style={styles.navItem}>
+              <Pressable onPress={signOut}>
+                <Text
+                  color={"header"}
+                  fontWeight={"bold"}
+                  fontSize={"navheading"}
+                >
+                  Sign out
+                </Text>
+              </Pressable>
+            </View>
+          </>
+        ) : (
+          <Link to="/signin">
+            <Text color={"header"} fontWeight={"bold"} fontSize={"navheading"}>
+              Sign in
+            </Text>
+          </Link>
+        )}
       </ScrollView>
     </View>
   );
