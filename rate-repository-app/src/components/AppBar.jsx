@@ -72,11 +72,30 @@ const AppBar = () => {
             </View>
           </>
         ) : (
-          <Link to="/signin">
-            <Text color={"header"} fontWeight={"bold"} fontSize={"navheading"}>
-              Sign in
-            </Text>
-          </Link>
+          <>
+            <View style={styles.navItem}>
+              <Link to="/signin">
+                <Text
+                  color={"header"}
+                  fontWeight={"bold"}
+                  fontSize={"navheading"}
+                >
+                  Sign in
+                </Text>
+              </Link>
+            </View>
+            <View style={styles.navItem}>
+              <Link to="/signup">
+                <Text
+                  color={"header"}
+                  fontWeight={"bold"}
+                  fontSize={"navheading"}
+                >
+                  Sign up
+                </Text>
+              </Link>
+            </View>
+          </>
         )}
       </ScrollView>
     </View>

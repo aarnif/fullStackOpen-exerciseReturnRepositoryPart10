@@ -4,6 +4,7 @@ import AppBar from "./AppBar";
 import RepositoryList from "./RepositoryList";
 import SingleRepository from "./SingleRepository";
 import SignIn from "./SignIn";
+import SignUp from "./SignUp";
 import CreateReview from "./CreateReview";
 import useRepositories from "../hooks/useRepositories";
 
@@ -35,6 +36,7 @@ const Main = () => {
       <Routes>
         <Route path="/" element={<RepositoryList />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route
           path="/repositories/:id"
           element={<SingleRepository repositoryId={findRepo?.id} />}
