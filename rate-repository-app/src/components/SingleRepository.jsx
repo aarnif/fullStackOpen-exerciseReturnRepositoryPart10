@@ -5,9 +5,9 @@ import { GET_SINGLE_REPO } from "../graphql/queries";
 import Text from "./Text";
 import { format } from "date-fns";
 
-const ratingContainerHeight = 50;
+export const ratingContainerHeight = 50;
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   separator: {
     height: 10,
   },
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const ItemSeparator = () => <View style={styles.separator} />;
+export const ItemSeparator = () => <View style={styles.separator} />;
 
 const RepositoryInfo = ({ repository }) => {
   // Repository's information implemented in the previous exercise

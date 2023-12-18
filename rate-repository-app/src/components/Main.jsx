@@ -5,6 +5,7 @@ import RepositoryList from "./RepositoryList";
 import SingleRepository from "./SingleRepository";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
+import MyReviews from "./MyReviews";
 import CreateReview from "./CreateReview";
 import useRepositories from "../hooks/useRepositories";
 
@@ -41,6 +42,7 @@ const Main = () => {
           path="/repositories/:id"
           element={<SingleRepository repositoryId={findRepo?.id} />}
         />
+        <Route path="/my-reviews" element={<MyReviews />} />
         <Route path="/create-review" element={<CreateReview />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

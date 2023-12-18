@@ -49,6 +49,17 @@ const AppBar = () => {
         {data?.me !== null ? (
           <>
             <View style={styles.navItem}>
+              <Link to="/my-reviews">
+                <Text
+                  color={"header"}
+                  fontWeight={"bold"}
+                  fontSize={"navheading"}
+                >
+                  My Reviews
+                </Text>
+              </Link>
+            </View>
+            <View style={styles.navItem}>
               <Link to="/create-review">
                 <Text
                   color={"header"}
