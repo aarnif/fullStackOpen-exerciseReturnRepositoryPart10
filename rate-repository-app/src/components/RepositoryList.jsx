@@ -1,8 +1,10 @@
 import { FlatList, View, StyleSheet } from "react-native";
 import RepositoryItem from "./RepositoryItem";
 import useRepositories from "../hooks/useRepositories";
+import SearchBar from "./SearchBar";
 import SortingMenu from "./SortingMenu";
 import { useState } from "react";
+import { useDebounce } from "use-debounce";
 
 const styles = StyleSheet.create({
   separator: {
@@ -14,6 +16,8 @@ const ItemSeparator = () => <View style={styles.separator} />;
 
 export const RepositoryListContainer = ({
   repositories,
+  searchWord,
+  setSearchWord,
   selectedSorting,
   setSelectedSorting,
 }) => {
@@ -27,14 +31,16 @@ export const RepositoryListContainer = ({
   return (
     <FlatList
       ListHeaderComponent={
-        <SortingMenu
-          selectedSorting={selectedSorting}
-          setSelectedSorting={setSelectedSorting}
-        />
+        <>
+          <SearchBar searchWord={searchWord} setSearchWord={setSearchWord} />
+          <SortingMenu
+            selectedSorting={selectedSorting}
+            setSelectedSorting={setSelectedSorting}
+          />
+        </>
       }
       data={repositoryNodes}
       ItemSeparatorComponent={ItemSeparator}
-      // other props
       renderItem={({ item }) => {
         return <RepositoryItem item={item} showLinkToGitHubPage={false} />;
       }}
@@ -43,6 +49,12 @@ export const RepositoryListContainer = ({
 };
 
 const RepositoryList = () => {
+  const [searchWord, setSearchWord] = useState("");
+  const [debouncedSearchWord, setDebouncedSearchWord] = useDebounce(
+    searchWord,
+    500
+  );
+
   const [selectedSorting, setSelectedSorting] = useState("LATEST");
 
   let queryArgs = null;
@@ -50,18 +62,21 @@ const RepositoryList = () => {
   switch (selectedSorting) {
     case "LATEST":
       queryArgs = {
+        searchKeyword: debouncedSearchWord,
         orderBy: "CREATED_AT",
         orderDirection: "DESC",
       };
       break;
     case "HIGHEST_RATED":
       queryArgs = {
+        searchKeyword: debouncedSearchWord,
         orderBy: "RATING_AVERAGE",
         orderDirection: "ASC",
       };
       break;
     case "LOWEST_RATED":
       queryArgs = {
+        searchKeyword: debouncedSearchWord,
         orderBy: "RATING_AVERAGE",
         orderDirection: "DESC",
       };
@@ -73,6 +88,8 @@ const RepositoryList = () => {
   return (
     <RepositoryListContainer
       repositories={repositories}
+      searchWord={searchWord}
+      setSearchWord={setSearchWord}
       selectedSorting={selectedSorting}
       setSelectedSorting={setSelectedSorting}
     />
