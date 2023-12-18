@@ -5,6 +5,7 @@ import { useQuery, useApolloClient } from "@apollo/client";
 
 import { GET_USER } from "../graphql/queries";
 import { useContext } from "react";
+import { useNavigate } from "react-router-native";
 
 import AuthStorageContext from "../contexts/AuthStorageContext";
 
@@ -29,11 +30,13 @@ const AppBar = () => {
   });
 
   const client = useApolloClient();
+  const navigate = useNavigate();
 
   const signOut = () => {
     console.log("Sign out!");
     authStorage.removeAccessToken();
     client.resetStore();
+    navigate("/");
   };
 
   return (
