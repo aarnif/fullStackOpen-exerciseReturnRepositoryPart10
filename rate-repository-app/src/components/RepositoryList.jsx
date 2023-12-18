@@ -1,6 +1,8 @@
 import { FlatList, View, StyleSheet } from "react-native";
 import RepositoryItem from "./RepositoryItem";
 import useRepositories from "../hooks/useRepositories";
+import SortingMenu from "./SortingMenu";
+import { useState } from "react";
 
 const styles = StyleSheet.create({
   separator: {
@@ -10,7 +12,11 @@ const styles = StyleSheet.create({
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-export const RepositoryListContainer = ({ repositories }) => {
+export const RepositoryListContainer = ({
+  repositories,
+  selectedSorting,
+  setSelectedSorting,
+}) => {
   // Get the nodes from the edges array
   const repositoryNodes = repositories
     ? repositories.edges.map((edge) => edge.node)
@@ -20,6 +26,12 @@ export const RepositoryListContainer = ({ repositories }) => {
 
   return (
     <FlatList
+      ListHeaderComponent={
+        <SortingMenu
+          selectedSorting={selectedSorting}
+          setSelectedSorting={setSelectedSorting}
+        />
+      }
       data={repositoryNodes}
       ItemSeparatorComponent={ItemSeparator}
       // other props
@@ -31,9 +43,40 @@ export const RepositoryListContainer = ({ repositories }) => {
 };
 
 const RepositoryList = () => {
-  const { repositories } = useRepositories();
+  const [selectedSorting, setSelectedSorting] = useState("LATEST");
 
-  return <RepositoryListContainer repositories={repositories} />;
+  let queryArgs = null;
+
+  switch (selectedSorting) {
+    case "LATEST":
+      queryArgs = {
+        orderBy: "CREATED_AT",
+        orderDirection: "DESC",
+      };
+      break;
+    case "HIGHEST_RATED":
+      queryArgs = {
+        orderBy: "RATING_AVERAGE",
+        orderDirection: "ASC",
+      };
+      break;
+    case "LOWEST_RATED":
+      queryArgs = {
+        orderBy: "RATING_AVERAGE",
+        orderDirection: "DESC",
+      };
+      break;
+  }
+
+  const { repositories } = useRepositories(queryArgs);
+
+  return (
+    <RepositoryListContainer
+      repositories={repositories}
+      selectedSorting={selectedSorting}
+      setSelectedSorting={setSelectedSorting}
+    />
+  );
 };
 
 export default RepositoryList;
