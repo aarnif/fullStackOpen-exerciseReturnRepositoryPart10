@@ -1,9 +1,8 @@
 import RepositoryItem from "./RepositoryItem";
 import { FlatList, View, StyleSheet } from "react-native";
-import { useQuery } from "@apollo/client";
-import { GET_SINGLE_REPO } from "../graphql/queries";
 import Text from "./Text";
 import { format } from "date-fns";
+import useSingleRepository from "../hooks/useSingleRepository";
 
 export const ratingContainerHeight = 50;
 
@@ -72,32 +71,38 @@ const ReviewItem = ({ review }) => {
 };
 
 const SingleRepository = ({ repositoryId }) => {
-  // ...
-  const { data, error, loading } = useQuery(GET_SINGLE_REPO, {
-    fetchPolicy: "cache-and-network",
-    variables: { repositoryId: repositoryId },
+  const variables = { repositoryId: repositoryId };
+
+  const { repository, fetchMore, loading } = useSingleRepository({
+    ...variables,
+    first: 4,
   });
 
   if (loading) {
     return null;
   }
 
-  const reviewNodes = data.repository.reviews
-    ? data.repository.reviews.edges.map((edge) => edge.node)
+  const onEndReach = () => {
+    console.log("You have reached the end of the current review list");
+    fetchMore();
+    console.log(repository.reviews);
+  };
+
+  const reviewNodes = repository.reviews
+    ? repository.reviews.edges.map((edge) => edge.node)
     : [];
 
   console.log(reviewNodes);
 
   return (
     <FlatList
+      ListHeaderComponent={() => <RepositoryInfo repository={repository} />}
       data={reviewNodes}
       ItemSeparatorComponent={ItemSeparator}
+      onEndReached={onEndReach}
+      onEndReachedThreshold={0.5}
       renderItem={({ item }) => <ReviewItem review={item} />}
       keyExtractor={({ id }) => id}
-      ListHeaderComponent={() => (
-        <RepositoryInfo repository={data.repository} />
-      )}
-      // ...
     />
   );
 };

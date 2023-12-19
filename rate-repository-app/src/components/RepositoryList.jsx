@@ -48,6 +48,7 @@ export const RepositoryListContainer = ({
       renderItem={({ item }) => {
         return <RepositoryItem item={item} showLinkToGitHubPage={false} />;
       }}
+      keyExtractor={({ id }) => id}
     />
   );
 };
@@ -91,7 +92,7 @@ const RepositoryList = () => {
   });
 
   const onEndReach = () => {
-    console.log("You have reached the end of the list");
+    console.log("You have reached the end of the repository list");
     fetchMore();
   };
 

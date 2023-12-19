@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 
 import { GET_REPOSITORIES } from "../graphql/queries";
@@ -19,7 +18,7 @@ const useRepositories = (variables) => {
       console.log("Cannot fetch more");
       return;
     }
-
+    console.log("Fetching more repositories");
     fetchMore({
       variables: {
         after: data.repositories.pageInfo.endCursor,

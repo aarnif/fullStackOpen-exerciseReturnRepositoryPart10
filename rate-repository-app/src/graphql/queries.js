@@ -61,7 +61,7 @@ export const GET_USER = gql`
 `;
 
 export const GET_SINGLE_REPO = gql`
-  query ($repositoryId: ID!) {
+  query ($repositoryId: ID!, $first: Int, $after: String) {
     repository(id: $repositoryId) {
       id
       ownerAvatarUrl
@@ -73,18 +73,26 @@ export const GET_SINGLE_REPO = gql`
       reviewCount
       ratingAverage
       url
-      reviews {
+      reviews(first: $first, after: $after) {
+        totalCount
         edges {
           node {
             id
             text
             rating
             createdAt
+            repositoryId
             user {
               id
               username
             }
           }
+          cursor
+        }
+        pageInfo {
+          endCursor
+          startCursor
+          hasNextPage
         }
       }
     }
