@@ -5,11 +5,15 @@ export const GET_REPOSITORIES = gql`
     $searchKeyword: String
     $orderBy: AllRepositoriesOrderBy
     $orderDirection: OrderDirection
+    $first: Int
+    $after: String
   ) {
     repositories(
       searchKeyword: $searchKeyword
       orderBy: $orderBy
       orderDirection: $orderDirection
+      first: $first
+      after: $after
     ) {
       edges {
         node {
@@ -23,6 +27,11 @@ export const GET_REPOSITORIES = gql`
           reviewCount
           ratingAverage
         }
+      }
+      pageInfo {
+        endCursor
+        startCursor
+        hasNextPage
       }
     }
   }

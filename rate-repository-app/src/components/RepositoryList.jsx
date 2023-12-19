@@ -16,11 +16,13 @@ const ItemSeparator = () => <View style={styles.separator} />;
 
 export const RepositoryListContainer = ({
   repositories,
+  onEndReach,
   searchWord,
   setSearchWord,
   selectedSorting,
   setSelectedSorting,
 }) => {
+  console.log(repositories);
   // Get the nodes from the edges array
   const repositoryNodes = repositories
     ? repositories.edges.map((edge) => edge.node)
@@ -41,6 +43,8 @@ export const RepositoryListContainer = ({
       }
       data={repositoryNodes}
       ItemSeparatorComponent={ItemSeparator}
+      onEndReached={onEndReach}
+      onEndReachedThreshold={0.5}
       renderItem={({ item }) => {
         return <RepositoryItem item={item} showLinkToGitHubPage={false} />;
       }}
@@ -57,37 +61,44 @@ const RepositoryList = () => {
 
   const [selectedSorting, setSelectedSorting] = useState("LATEST");
 
-  let queryArgs = null;
+  let variables = null;
 
   switch (selectedSorting) {
     case "LATEST":
-      queryArgs = {
-        searchKeyword: debouncedSearchWord,
+      variables = {
         orderBy: "CREATED_AT",
         orderDirection: "DESC",
       };
       break;
     case "HIGHEST_RATED":
-      queryArgs = {
-        searchKeyword: debouncedSearchWord,
+      variables = {
         orderBy: "RATING_AVERAGE",
         orderDirection: "ASC",
       };
       break;
     case "LOWEST_RATED":
-      queryArgs = {
-        searchKeyword: debouncedSearchWord,
+      variables = {
         orderBy: "RATING_AVERAGE",
         orderDirection: "DESC",
       };
       break;
   }
 
-  const { repositories } = useRepositories(queryArgs);
+  const { repositories, fetchMore } = useRepositories({
+    ...variables,
+    first: 3,
+    searchKeyword: debouncedSearchWord,
+  });
+
+  const onEndReach = () => {
+    console.log("You have reached the end of the list");
+    fetchMore();
+  };
 
   return (
     <RepositoryListContainer
       repositories={repositories}
+      onEndReach={onEndReach}
       searchWord={searchWord}
       setSearchWord={setSearchWord}
       selectedSorting={selectedSorting}
